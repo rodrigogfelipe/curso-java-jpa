@@ -9,23 +9,29 @@ import dominio.Pessoa;
 public class Programa {
 
 	public static void main(String[] args) {
-
-		// Instanciando os obj das classes
-		Pessoa p1 = new Pessoa(null, "Carlos da silva", "carlos@gmail.com");
-		Pessoa p2 = new Pessoa(null, "Rodrigo da silva", "rodrigo@gmail.com");
-		Pessoa p3 = new Pessoa(null, "Felipe da silva", "felipe@gmail.com");
-
+		
+		/*Um objeto EntityManagerFactory é utilizado para instanciar objetos EntityManager. Escopo: tipicamente mantem-se 
+		 * uma instância única de EntityManagerFactory para toda aplicação.   */
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("exemplo-jpa");
-
+		
+		/*Um objeto EntityManager encapsula uma conexão com a base de dados e serve para efetuar operações de acesso a dados 
+		 * (inserção, remoção, deleção, atualização) em entidades (clientes, produtos, pedidos, etc.) */
 		EntityManager em = emf.createEntityManager();
-
+		
+		/*
+		 em.find faz a buscar no BD da classe Pessoa pelo ID 2 // 
+		 Pessoa p = em.find(Pessoa.class, 2); // System.out.println(p);
+		 */
+		
+		//em.find faz a buscar no BD da classe Pessoa pelo ID utlizando em.remove(p) para DELETAR
+		Pessoa p = em.find(Pessoa.class, 2);
 		em.getTransaction().begin();
-		em.persist(p1);
-		em.persist(p2);
-		em.persist(p3);
+		em.remove(p);
 		em.getTransaction().commit();
+		
 		System.out.println("Pronto");
-
+		em.close();
+		emf.close();
 	}
 
 }
